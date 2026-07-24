@@ -1,0 +1,605 @@
+/* ─── óga — Estilos ──────────────────────────────────────────────────────── */
+/* Minimalista · monocromo · todo redondeado · sin sombras agresivas          */
+
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700&display=swap');
+
+/* ─── Variables ───────────────────────────────────────────────────────────── */
+
+:root {
+  --bg:           #ffffff;
+  --fg:           #111111;
+  --fg-secondary: #4a4a4a;
+  --fg-muted:     #8a8a8a;
+  --fg-soft:      #c8c8c8;
+  --border:       #e8e8e8;
+  --toggle-bg:    #f5f5f5;
+  --toggle-hover: #e8e8e8;
+  --radius-sm:    12px;
+  --radius-md:    20px;
+  --radius-lg:    28px;
+  --radius-full:  50%;
+  --font: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', system-ui, sans-serif;
+  --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.dark {
+  --bg:           #121212;
+  --fg:           #ececec;
+  --fg-secondary: #a0a0a0;
+  --fg-muted:     #6a6a6a;
+  --fg-soft:      #3a3a3a;
+  --border:       #2a2a2a;
+  --toggle-bg:    #252525;
+  --toggle-hover: #303030;
+}
+
+/* ─── Reset ───────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--fg);
+  transition: background var(--transition), color var(--transition);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Dithering ────────────────────────────────────────────────────────────── */
+
+.dither::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  mix-blend-mode: multiply;
+  z-index: 9999;
+}
+
+html.dark .dither::after {
+  mix-blend-mode: screen;
+  opacity: 0.035;
+}
+
+.feature-hidden {
+  display: none !important;
+}
+
+/* ─── Layout grid ─────────────────────────────────────────────────────────── */
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr auto auto 1fr;
+  grid-template-columns: 1fr 1fr;
+  padding: 28px 36px;
+  user-select: none;
+}
+
+/* ─── Clima ────────────────────────────────────────────────────────────────── */
+
+.top-left {
+  grid-row: 1;
+  grid-column: 1;
+  align-self: start;
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px 8px 12px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  transition: background var(--transition);
+}
+
+.top-left:hover { background: var(--toggle-bg); }
+
+.wi-icon {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.wi-icon svg {
+  width: 28px; height: 28px;
+  stroke: var(--fg-secondary);
+  fill: none;
+}
+
+#weather-info {
+  display: flex; flex-direction: column; gap: 0;
+  line-height: 1.2;
+}
+
+#weather-temp {
+  font-size: 20px; font-weight: 300; color: var(--fg);
+  letter-spacing: -0.02em;
+}
+
+#weather-city {
+  font-size: 11px; font-weight: 400; color: var(--fg-muted);
+  letter-spacing: 0.02em; text-transform: uppercase;
+}
+
+/* ─── Fecha + Saludo ──────────────────────────────────────────────────────── */
+
+#greeting-area {
+  grid-row: 1; grid-column: 2;
+  align-self: start; justify-self: end;
+  display: flex; flex-direction: column; align-items: flex-end;
+  gap: 1px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  transition: background var(--transition);
+}
+
+#greeting-area:hover { background: var(--toggle-bg); }
+
+#date {
+  font-size: 14px; font-weight: 400; color: var(--fg-secondary);
+  letter-spacing: 0.01em;
+}
+
+#greeting {
+  font-size: 11px; font-weight: 300; color: var(--fg-muted);
+  letter-spacing: 0.02em; opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+#greeting.show { opacity: 1; }
+
+/* ─── Reloj + Búsqueda + Links ────────────────────────────────────────────── */
+
+#center-area {
+  grid-row: 2; grid-column: 1 / -1;
+  align-self: center; justify-self: center;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 24px; text-align: center;
+}
+
+#clock-time {
+  font-size: clamp(80px, 18vw, 180px);
+  font-weight: 500; letter-spacing: -0.06em; line-height: 0.85;
+  color: var(--fg); transition: color var(--transition);
+}
+
+/* ─── Búsqueda ─────────────────────────────────────────────────────────────── */
+
+#search-bar {
+  width: 100%; max-width: 420px;
+  opacity: 0; animation: fadeIn 0.6s ease-out 0.18s both;
+}
+
+#search-input {
+  width: 100%;
+  padding: 12px 24px;
+  font-family: var(--font); font-size: 15px; font-weight: 300;
+  color: var(--fg); background: var(--toggle-bg);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  outline: none;
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+  letter-spacing: 0.01em;
+}
+
+#search-input::placeholder { color: var(--fg-muted); font-weight: 300; }
+#search-input:hover { border-color: var(--border); }
+#search-input:focus {
+  background: var(--bg);
+  border-color: var(--fg-soft);
+  box-shadow: 0 0 0 1px var(--fg-soft);
+}
+
+html.dark #search-input:focus {
+  border-color: var(--fg-muted);
+  box-shadow: 0 0 0 1px var(--fg-muted);
+}
+
+/* ─── Links rápidos ────────────────────────────────────────────────────────── */
+
+#quick-links {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; flex-wrap: wrap;
+  min-height: 32px;
+  opacity: 0; animation: fadeIn 0.6s ease-out 0.22s both;
+}
+
+.quick-link {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer; text-decoration: none;
+  transition: background var(--transition), color var(--transition), transform 0.2s ease;
+}
+
+.quick-link:hover {
+  background: var(--toggle-bg);
+  color: var(--fg-secondary);
+  transform: scale(1.1);
+}
+
+.quick-link svg { width: 16px; height: 16px; }
+
+.quick-link-add {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: var(--radius-full);
+  border: 1px dashed var(--fg-soft);
+  color: var(--fg-muted);
+  cursor: pointer; background: none;
+  font-family: var(--font); font-size: 16px; font-weight: 300;
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.quick-link-add:hover {
+  border-color: var(--fg-secondary);
+  color: var(--fg-secondary);
+}
+
+.quick-link-edit {
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 14px; height: 14px;
+  border-radius: var(--radius-full);
+  background: var(--toggle-bg);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--fg-muted); font-size: 8px;
+  padding: 0;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.quick-link-wrap {
+  position: relative;
+}
+
+.quick-link-wrap:hover .quick-link-edit { opacity: 1; }
+
+/* ─── Now Playing (inferior izquierda) ─────────────────────────────────────── */
+
+#nowplaying {
+  grid-row: 4; grid-column: 1;
+  align-self: end; justify-self: start;
+  display: flex; align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  transition: background var(--transition), opacity var(--transition);
+  min-height: 28px;
+  margin: 0 0 12px 4px;
+}
+
+#nowplaying:hover { background: var(--toggle-bg); }
+
+/* ─── Ondas idle (sin música) ──────────────────────────────────────────────── */
+
+#np-wave {
+  display: flex; align-items: center; gap: 2px;
+  height: 16px;
+}
+
+#np-wave span {
+  display: block;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--fg-soft);
+  transform-origin: bottom;
+  animation: wave 1.5s ease-in-out infinite;
+}
+
+#np-wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+#np-wave span:nth-child(2) { height: 14px; animation-delay: 0.2s; }
+#np-wave span:nth-child(3) { height: 6px; animation-delay: 0.4s; }
+
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.5); opacity: 0.3; }
+  50%      { transform: scaleY(1);   opacity: 0.6; }
+}
+
+#nowplaying.idle #np-icon,
+#nowplaying.idle #np-track {
+  display: none;
+}
+
+#nowplaying:not(.idle) #np-wave {
+  display: none;
+}
+
+#np-icon {
+  display: flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px;
+  color: var(--fg-secondary); flex-shrink: 0;
+  margin-top: -1px;
+}
+
+#np-icon svg { width: 16px; height: 16px; }
+
+#np-track {
+  font-size: 13px; font-weight: 400;
+  color: var(--fg-secondary); letter-spacing: 0.01em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 300px;
+}
+
+/* ─── Frase del día ────────────────────────────────────────────────────────── */
+
+#phrase {
+  grid-row: 4; grid-column: 1 / -1;
+  align-self: end; justify-self: center;
+  margin-bottom: 14px;
+}
+
+#phrase-text {
+  font-size: 11px; font-weight: 200; color: var(--fg-muted);
+  letter-spacing: 0.02em;
+  max-width: 340px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ─── Pomodoro + Pestañas + Toggle ─────────────────────────────────────────── */
+
+#bottom-tools {
+  grid-row: 4; grid-column: 2;
+  align-self: end; justify-self: end;
+  display: flex; align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+/* ─── Pomodoro ─────────────────────────────────────────────────────────────── */
+
+.pomo-group {
+  display: flex; flex-direction: row; align-items: center;
+  gap: 3px;
+}
+
+#pomodoro-btn {
+  position: relative;
+  width: 30px; height: 30px;
+  border: none; border-radius: var(--radius-full);
+  background: var(--toggle-bg);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--transition), transform 0.2s ease;
+}
+
+#pomodoro-btn:hover {
+  background: var(--toggle-hover);
+}
+
+#pomodoro-btn:active { }
+
+#pomodoro-btn svg {
+  width: 20px; height: 20px;
+  transform: rotate(-90deg);
+}
+
+#pomodoro-bg {
+  stroke: var(--fg-soft);
+  fill: none;
+}
+
+#pomodoro-fg {
+  stroke: var(--fg-secondary);
+  fill: none;
+  transition: stroke-dashoffset 1s linear, stroke var(--transition);
+}
+
+#pomodoro-btn.running #pomodoro-fg {
+  stroke: var(--fg-muted);
+}
+
+#pomodoro-time {
+  font-size: 8px; font-weight: 500;
+  color: var(--fg-muted);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+/* ─── Toggle modo oscuro ───────────────────────────────────────────────────── */
+
+#theme-toggle,
+#settings-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px;
+  border: none; border-radius: var(--radius-full);
+  background: var(--toggle-bg);
+  color: var(--fg-secondary);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), transform 0.2s ease;
+}
+
+#theme-toggle:hover,
+#settings-btn:hover {
+  background: var(--toggle-hover);
+  color: var(--fg);
+  transform: scale(1.06);
+}
+
+#theme-toggle:active,
+#settings-btn:active { transform: scale(0.94); }
+
+#theme-toggle svg,
+#settings-btn svg {
+  width: 16px; height: 16px;
+  transition: opacity var(--transition);
+}
+
+html.light #theme-toggle .sun-icon  { opacity: 1; }
+html.light #theme-toggle .moon-icon { opacity: 0; position: absolute; }
+html.dark  #theme-toggle .sun-icon  { opacity: 0; position: absolute; }
+html.dark  #theme-toggle .moon-icon { opacity: 1; }
+
+/* ─── Panel de ajustes ─────────────────────────────────────────────────────── */
+
+#settings-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(0,0,0,0.2);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+#settings-overlay.open {
+  opacity: 1; pointer-events: auto;
+}
+
+#settings-panel {
+  width: 260px; max-height: 65vh;
+  background: var(--bg);
+  border-radius: 48px;
+  padding: 16px 0;
+  box-shadow: 0 0 0 1px var(--border), 0 8px 40px rgba(0,0,0,0.08);
+  overflow-y: auto;
+  transform: translateY(10px);
+  transition: transform 0.25s ease;
+}
+
+#settings-overlay.open #settings-panel {
+  transform: translateY(0);
+}
+
+#settings-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px; font-weight: 500; color: var(--fg-secondary);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+
+#settings-close {
+  width: 22px; height: 22px; border: none; border-radius: var(--radius-full);
+  background: var(--toggle-bg); color: var(--fg-muted);
+  cursor: pointer; font-size: 10px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--transition), color var(--transition);
+}
+
+#settings-close:hover {
+  background: var(--toggle-hover); color: var(--fg);
+}
+
+#settings-body {
+  padding: 8px 0;
+}
+
+/* ─── Toggle switch redondeado ─────────────────────────────────────────────── */
+
+.setting-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 16px;
+  transition: background var(--transition);
+}
+
+.setting-row:hover {
+  background: var(--toggle-bg);
+}
+
+.setting-label {
+  font-size: 12px; font-weight: 400; color: var(--fg);
+}
+
+.setting-label small {
+  display: block;
+  font-size: 9px; font-weight: 300; color: var(--fg-muted);
+  margin-top: 0;
+}
+
+.toggle {
+  position: relative;
+  width: 32px; height: 18px;
+  border-radius: 99px;
+  background: var(--fg-soft);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--transition);
+}
+
+.toggle.on {
+  background: var(--fg-secondary);
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 14px; height: 14px;
+  border-radius: var(--radius-full);
+  background: var(--bg);
+  transition: transform var(--transition);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.toggle.on .toggle-knob {
+  transform: translateX(14px);
+}
+
+/* ─── Mandatory label ──────────────────────────────────────────────────────── */
+
+.setting-mandatory {
+  font-size: 9px; font-weight: 500; color: var(--fg-muted);
+  text-transform: uppercase; letter-spacing: 0.03em;
+}
+
+/* ─── Animaciones ──────────────────────────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.top-left,
+#greeting-area,
+#center-area,
+#nowplaying,
+#phrase,
+#bottom-tools {
+  animation: fadeIn 0.6s ease-out both;
+}
+
+.top-left       { animation-delay: 0.05s; }
+#greeting-area  { animation-delay: 0.10s; }
+#center-area    { animation-delay: 0.15s; }
+#nowplaying     { animation-delay: 0.25s; }
+#phrase         { animation-delay: 0.28s; }
+#bottom-tools   { animation-delay: 0.30s; }
+
+/* ─── Pomodoro notificación ────────────────────────────────────────────────── */
+
+@keyframes pomoFlash {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+
+#pomodoro-btn.flash {
+  animation: pomoFlash 0.6s ease-in-out 3;
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  #app { padding: 20px; }
+  #clock-time { font-size: clamp(60px, 20vw, 120px); letter-spacing: -0.04em; }
+  #date { font-size: 11px; }
+  #weather-temp { font-size: 16px; }
+  #weather-city { font-size: 10px; }
+  #np-track { max-width: 200px; font-size: 12px; }
+  #search-input { font-size: 14px; padding: 10px 18px; }
+  #search-bar { max-width: 300px; }
+  #phrase-text { font-size: 10px; max-width: 260px; }
+}
