@@ -2,8 +2,8 @@
 
 ## 1.0.0 (2026-07-24)
 
-- Lanzamiento inicial
-- New tab con reloj, clima, pomodoro, musica, busqueda web
-- Tema claro/oscuro
-- Links rapidos personalizables
-- Frase del dia
+- Initial release
+- New tab with clock, weather, pomodoro, music, web search
+- Light/dark theme
+- Customizable quick links
+- Phrase of the day

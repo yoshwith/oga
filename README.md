@@ -1,25 +1,25 @@
-# oga
+# óga
 
-New tab minimalista. Clima, hora, pomodoro, musica y busqueda — todo en monocromo.
+Minimal homepage for Chromium-based browsers. Weather, clock, pomodoro, music, and search — all monochrome.
 
-## uso
+## Install
 
-1. Abri `chrome://extensions`
-2. Activa "Modo desarrollador"
-3. Carga la carpeta `oga/` como extension desempaquetada
-4. Abri una pestana nueva
+1. Open `chrome://extensions`
+2. Enable "Developer mode"
+3. Load the `óga/` folder as an unpacked extension
+4. Open a new tab
 
-## features
+## Features
 
-- Reloj en tiempo real
-- Clima (Open-Meteo, sin API key)
-- Busqueda web
-- Pomodoro
-- Now playing (deteccion de musica)
-- Frase del dia
-- Tema claro/oscuro
-- Links rapidos personalizables
+- Real-time clock
+- Weather (Open-Meteo, no API key needed)
+- Web search bar
+- Pomodoro timer
+- Now playing (music detection)
+- Phrase of the day
+- Light/dark theme
+- Customizable quick links
 
-## stack
+## Stack
 
-Vanilla JS + CSS · Be Vietnam Pro · thinking-orbs · Open-Meteo API
+Vanilla JS + CSS · Be Vietnam Pro · thinking-orbs · Open-Meteo API · Chrome Extensions MV3
